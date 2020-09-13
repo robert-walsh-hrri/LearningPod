@@ -10,8 +10,9 @@ app.use(bodyparser());
 app.use('/', express.static(path.join(__dirname, '..', '/public/')));
 
 app.get('/user/userType:userType&firstName:firstName&lastName:lastName', (req, res) => {
-  console.log(req.params);
-  res.send(req.params);
+  const { userType, firstName, lastName } = req.params;
+  var info = getUserInfo(userType, firstName, lastName);
+  res.send(info);
   // db controller ready to add
 });
 
