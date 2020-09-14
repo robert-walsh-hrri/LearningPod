@@ -1,5 +1,5 @@
 const path = require('path');
-const { connection, getUserInfo } = require('../database/index.js');
+const { connection, getUserInfo, deleteClass } = require('../database/index.js');
 const express = require('express');
 const bodyparser = require('body-parser');
 const app = express();
@@ -10,10 +10,15 @@ app.use(bodyparser());
 app.use('/', express.static(path.join(__dirname, '..', '/public/')));
 
 app.get('/user/userType:userType&firstName:firstName&lastName:lastName', (req, res) => {
-  const { userType, firstName, lastName } = req.params;
-  var info = getUserInfo(userType, firstName, lastName);
-  res.send(info);
-  // db controller ready to add
+  const { firstName, lastName } = req.params;
+  let { userType } = req.params;
+  userType = userType.slice(1);
+  getUserInfo(userType, firstName, lastName, res);
+});
+
+app.post('/user/', (req, res) => {
+  const { deleteThisClass, childFirstName, childLastName } = req.body;
+  deleteClass(deleteThisClass, childFirstName, childLastName, res);
 });
 
 app.listen(port, () => {

@@ -19,6 +19,7 @@ class App extends React.Component {
     this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
     this.handleLastNameChange = this.handleLastNameChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleDeenroll = this.handleDeenroll.bind(this);
   }
 
   handleRadioChange(e) {
@@ -36,14 +37,39 @@ class App extends React.Component {
   handleSubmit() {
     axios.get(`/user/userType:${this.state.userType}&firstName${this.state.firstName}&lastName${this.state.lastName}`)
       .then((results) => {
-        this.setState({loaded: true});
+        if (this.state.userType === 'parent') {
+          var childLastName = results.data.pop()
+          var childFirstName = results.data.pop();
+          this.setState({
+            childFirstName: childFirstName,
+            childLastName: childLastName,
+          });
+        }
+        var pod = results.data.pop();
+        this.setState({
+          loaded: true,
+          classList: results.data,
+          pod: pod,
+        });
       }).catch((err) => {
         console.log(err, this.state.firstName);
       });
   }
 
+  handleDeenroll(e) {
+    axios.post('/user/', {
+      deleteThisClass: e.target.value,
+      childLastName: this.state.childLastName,
+      childFirstName: this.state.childFirstName,
+    })
+      .then((results) => {
+        this.handleSubmit();
+      })
+  }
+
   render() {
     var isParent = this.state.userType === 'parent';
+    var isNotStudent = this.state.userType !== 'student';
     return (
     <div style=
       {
@@ -62,6 +88,22 @@ class App extends React.Component {
         }
       >
         {this.state.loaded === false ? 'Please log in' : this.state.firstName + ' is logged in.'}
+        <br></br>
+        <h3 style={isParent && this.state.loaded ? {} : {display: "none"}}>{this.state.childFirstName}'s Current Classes</h3>
+        {this.state.classList.length === 0 ? '' : this.state.classList.map((item) => {
+          return (
+            <div>
+              <h4>{item.class_name}<br></br></h4>
+              <span>Start Date: {item.start_date}<br></br></span>
+              <span>End Date: {item.end_date}<br></br></span>
+              <span>Days: {item.days}<br></br></span>
+              <span>Zoom Room: <a href={'"' + item.export_zoom + '"'}>{item.expert_zoom}</a><br></br></span>
+              <span style={isNotStudent ? {} : {display: "none"}}>Session Rate: ${item.rate}<br></br></span>
+              <span style={isNotStudent ? {} : {display: "none"}}>Weekly Rate: ${parseInt(item.rate) * item.days.length}<br></br></span>
+              <button style={isParent ? {marginTop: "4px", marginLeft: "auto", marginRight: "auto", display: "block"} : {display: "none"}} type="button" onClick={this.handleDeenroll} value={item.class_name}> De-enroll from {item.class_name} </button>
+            </div>
+          );
+        })}
       </div>
       <div style=
         {
@@ -73,7 +115,7 @@ class App extends React.Component {
       >
 
         <div>
-          <form>
+          <form style={{marginTop: "4px", marginLeft: "auto", marginRight: "auto", display: "block"}}>
             <label
               for="firstName"
               style={{display: "inline"}}
@@ -101,6 +143,7 @@ class App extends React.Component {
               onChange={this.handleLastNameChange}
               style={{display: "inline"}}
             ></input>
+            <br></br>
             <br></br>
             <input
               type="radio"
@@ -142,18 +185,20 @@ class App extends React.Component {
               Expert
             </label>
             <br></br>
-            <button type="button" onClick={this.handleSubmit}> Log In </button>
+            <button style={{marginTop: "4px", marginLeft: "auto", marginRight: "auto", display: "block"}} type="button" onClick={this.handleSubmit}> Log In </button>
+            <br></br>
           </form>
-          <span style={!isParent ? {display: "none"} : {}}> Child First Name: {this.state.childFirstName}</span>
+          <span style={!isParent ? {display: "none"} : {}}> Child First Name: {this.state.childFirstName}<br></br></span>
           <br></br>
-          <span style={!isParent ? {display: "none"} : {}}> Child Last Name: {this.state.childLastName}</span>
+          <span style={!isParent ? {display: "none"} : {}}> Child Last Name: {this.state.childLastName}<br></br></span>
           <br></br>
-          <span> Pod: {this.state.pod}</span>
+          <span> Pod: {this.state.pod}<br></br></span>
           <br></br>
           <div> Classes:
+          <br></br>
             {
               this.state.classList.map((item) => {
-                return (<span>{item}</span>);
+                return (<span><br></br>{item.class_name}</span>);
                 })
             }
           </div>
