@@ -45,6 +45,46 @@ const deleteClass = (className, firstName, lastName, res) => {
   })
 };
 
+const getClasses = (firstName, lastName, res) => {
+  const sqlGetClasses1 = `SELECT class_id FROM student_classes WHERE student_id=(SELECT student_id FROM student WHERE first_name=\'${firstName}\' AND last_name=\'${lastName}\')`;
+
+  client.query(sqlGetClasses1, (err, results) => {
+    const resultArray = [];
+    for (var i = 0; i < results.rows.length; i++) {
+      resultArray.push(results.rows[i].class_id);
+    }
+    let resultChecker = '(' + resultArray.join(',') + ')';
+    const sqlGetClasses2 = `SELECT * FROM classes WHERE class_id NOT IN ${resultChecker}`;
+    client.query(sqlGetClasses2, (err, results) => {
+      res.send(results.rows);
+    })
+  });
+};
+
+const enrollClasses = (className, firstName, lastName, res) => {
+  const sqlGetStudentId = `SELECT student_id FROM student WHERE first_name=\'${firstName}\' AND last_name=\'${lastName}\'`;
+  const sqlGetClassId = `SELECT class_id FROM classes WHERE class_name=\'${className}\'`;
+  client.query(sqlGetStudentId, (err, studentResult) => {
+    if (err) {
+      console.log(err);
+    }
+    client.query(sqlGetClassId, (err, classResult) => {
+      if (err) {
+        console.log(err);
+      }
+      const sqlEnrollClass = `INSERT INTO student_classes (student_id, class_id) VALUES (${studentResult.rows[0].student_id}, ${classResult.rows[0].class_id})`;
+      client.query(sqlEnrollClass, (err, results) => {
+        if (err) {
+          console.log(err);
+        }
+        res.send(results);
+      })
+    });
+  });
+};
+
 module.exports.connection = client;
 module.exports.getUserInfo = getUserInfo;
 module.exports.deleteClass = deleteClass;
+module.exports.getClasses = getClasses;
+module.exports.enrollClasses = enrollClasses;
