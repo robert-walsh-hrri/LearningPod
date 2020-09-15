@@ -1,5 +1,4 @@
 import React from 'react';
-import Classes from './Classes.jsx';
 import axios from 'axios';
 
 class App extends React.Component {
@@ -177,39 +176,152 @@ class App extends React.Component {
               }
             }
           >
-            {this.state.loaded === false ? 'Please log in' : this.state.firstName + ' is logged in.'}
+            {this.state.loaded === false ?
+              'Please log in' :
+              this.state.firstName + ' is logged in.'}
             <br></br>
-            <h3 style={isParent && this.state.loaded ? {} : {display: "none"}}>{this.state.childFirstName}'s Current Classes</h3>
-            {this.state.classList.length === 0 ? '' : this.state.classList.map((item) => {
-              return (
-                <div>
-                  <h4>{item.class_name}<br></br></h4>
-                  <span>Start Date: {item.start_date}<br></br></span>
-                  <span>End Date: {item.end_date}<br></br></span>
-                  <span>Days: {item.days}<br></br></span>
-                  <span>Zoom Room: <a href={'"' + item.export_zoom + '"'}>{item.expert_zoom}</a><br></br></span>
-                  <span style={isNotStudent ? {} : {display: "none"}}>Session Rate: ${item.rate}<br></br></span>
-                  <span style={isNotStudent ? {} : {display: "none"}}>Weekly Rate: ${parseInt(item.rate) * item.days.length}<br></br></span>
-                  <button style={isParent ? {marginTop: "4px", marginLeft: "15px", marginRight: "auto", display: "block"} : {display: "none"}} type="button" onClick={this.handleDeenroll} value={item.class_name}> De-enroll from {item.class_name} </button>
-                </div>
-              );
-            })}
+            <h3 style={
+              isParent && this.state.loaded ?
+              {} :
+              {display: "none"}
+            }>
+              {this.state.childFirstName}'s Current Classes
+            </h3>
+            {this.state.classList.length === 0 ?
+              '' :
+              this.state.classList.map((item) => {
+                return (
+                  <div>
+                    <h4>
+                      {item.class_name}
+                      <br></br>
+                    </h4>
+                    <span>
+                      Start Date: {item.start_date}
+                      <br></br>
+                    </span>
+                    <span>
+                      End Date: {item.end_date}
+                      <br></br>
+                    </span>
+                    <span>
+                      Days: {item.days}
+                      <br></br>
+                    </span>
+                    <span>
+                      Zoom Room: <a href={'"' + item.export_zoom + '"'}>
+                        {item.expert_zoom}
+                      </a>
+                      <br></br>
+                    </span>
+                    <span
+                      style={
+                        isNotStudent ?
+                        {} :
+                        {display: "none"}
+                      }>
+                        Session Rate: ${item.rate}
+                        <br></br>
+                    </span>
+                    <span
+                      style={
+                        isNotStudent ?
+                        {} :
+                        {display: "none"}
+                    }>
+                      Weekly Rate: ${parseInt(item.rate) * item.days.length}
+                      <br></br>
+                    </span>
+                    <button
+                      style={
+                        isParent ?
+                        {
+                          marginTop: "4px",
+                          marginLeft: "15px",
+                          marginRight: "auto",
+                          display: "block"
+                        } :
+                        {display: "none"}
+                      }
+                      type="button"
+                      onClick={this.handleDeenroll}
+                      value={item.class_name}
+                    >
+                       De-enroll from {item.class_name}
+                    </button>
+                  </div>
+                );
+              })}
             <hr></hr>
-            <h3 style={isParent && this.state.loaded ? {} : {display: "none"}}> Some other classes {this.state.childFirstName} might be interested in </h3>
-            {this.state.restClasses.length === 0 ? '' : this.state.restClasses.map((item) => {
-              return (
-                <div>
-                  <h4>{item.class_name}<br></br></h4>
-                  <span>Start Date: {item.start_date}<br></br></span>
-                  <span>End Date: {item.end_date}<br></br></span>
-                  <span>Days: {item.days}<br></br></span>
-                  <span>Zoom Room: <a href={'"' + item.export_zoom + '"'}>{item.expert_zoom}</a><br></br></span>
-                  <span style={isNotStudent ? {} : {display: "none"}}>Session Rate: ${item.rate}<br></br></span>
-                  <span style={isNotStudent ? {} : {display: "none"}}>Weekly Rate: ${parseInt(item.rate) * item.days.length}<br></br></span>
-                  <button style={isParent ? {marginTop: "4px", marginLeft: "15px", marginRight: "auto", display: "block"} : {display: "none"}} type="button" onClick={this.handleEnroll} value={item.class_name}> Enroll {this.state.childFirstName} in {item.class_name} </button>
-                </div>
-              );
-            })}
+            <h3 style={isParent && this.state.loaded ?
+              {} :
+              {display: "none"}}
+            >
+               Some other classes {this.state.childFirstName} might be interested in
+            </h3>
+            {this.state.restClasses.length === 0 ?
+              '' :
+              this.state.restClasses.map((item) => {
+                return (
+                  <div>
+                    <h4>
+                      {item.class_name}
+                      <br></br>
+                    </h4>
+                    <span>
+                      Start Date: {item.start_date}
+                      <br></br>
+                    </span>
+                    <span>
+                      End Date: {item.end_date}
+                      <br></br>
+                    </span>
+                    <span>
+                      Days: {item.days}
+                      <br></br>
+                    </span>
+                    <span>
+                      Zoom Room: <a href={'"' + item.export_zoom + '"'}>
+                        {item.expert_zoom}
+                      </a>
+                      <br></br>
+                    </span>
+                    <span style={
+                      isNotStudent ?
+                      {} :
+                      {display: "none"}
+                    }>
+                      Session Rate: ${item.rate}
+                      <br></br>
+                    </span>
+                    <span style={
+                      isNotStudent ?
+                      {} :
+                      {display: "none"}
+                    }>
+                      Weekly Rate: ${parseInt(item.rate) * item.days.length}
+                      <br></br>
+                    </span>
+                    <button
+                      style={
+                        isParent ?
+                        {
+                          marginTop: "4px",
+                          marginLeft: "15px",
+                          marginRight: "auto",
+                          display: "block"
+                        } :
+                        {display: "none"}
+                      }
+                      type="button"
+                      onClick={this.handleEnroll}
+                      value={item.class_name}
+                    >
+                      Enroll {this.state.childFirstName} in {item.class_name}
+                    </button>
+                  </div>
+                );
+              })}
           </div>
           <div style=
             {
@@ -225,7 +337,14 @@ class App extends React.Component {
           >
 
             <div>
-              <form style={{marginTop: "4px", marginLeft: "auto", marginRight: "auto", display: "block"}}>
+              <form style=
+                {{
+                  marginTop: "4px",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  display: "block"
+                }}
+              >
                 <label
                   for="firstName"
                   style={{display: "inline"}}
@@ -295,13 +414,52 @@ class App extends React.Component {
                   Expert
                 </label>
                 <br></br>
-                <button style={{marginTop: "4px", marginLeft: "auto", marginRight: "auto", display: "block"}} type="button" onClick={this.handleSubmit}> Log In </button>
+                <button
+                  style=
+                    {
+                      {
+                        marginTop: "4px",
+                        marginLeft: "auto",
+                        marginRight: "auto",
+                        display: "block"
+                      }
+                    }
+                  type="button"
+                  onClick={this.handleSubmit}
+                >
+                   Log In
+                </button>
                 <br></br>
               </form>
-              <span style={!isParent ? {display: "none"} : {}}> Child: {this.state.childFirstName} {this.state.childLastName}<br></br></span>
+              <span
+                style={
+                  !isParent ?
+                  {display: "none"} :
+                  {}
+                }
+              >
+                 Child: {this.state.childFirstName} {this.state.childLastName}
+                 <br></br>
+              </span>
               <br></br>
-              <span> Pod: {this.state.pod}<br></br></span>
-              <div> <h4>Classes: </h4>
+              <span
+                style={
+                  this.state.loaded ?
+                  {} :
+                  {display: "none"}
+                }
+              >
+                 Pod: {this.state.pod}
+                 <br></br>
+              </span>
+              <div style={
+                this.state.loaded ?
+                {} :
+                {display: "none"}
+              }>
+                <h4>
+                  Classes:
+                </h4>
                 {
                   this.state.classList.map((item) => {
                     return (<span>{item.class_name}<br></br></span>);
@@ -309,15 +467,37 @@ class App extends React.Component {
                 }
               </div>
               <br></br>
-              <div style={isParent ? {} : {display: "none"}}> Weekly Fee: ${this.state.classList.reduce((a, b) => {
-                return a + b.rate * b.days.length;
-              }, 0)}
+              <div
+                style={
+                  isParent ?
+                  {} :
+                  {display: "none"}
+                }
+              >
+                Weekly Fee: ${
+                  this.state.classList.reduce((a, b) => {
+                    return a + b.rate * b.days.length;
+                  }, 0)
+                }
               </div>
               <br></br>
-              <div>
+              <div
+                style={
+                  isParent ?
+                  {} :
+                  {display: "none"}
+                }
+              >
                 Not seeing the curriculum you need for {this.state.childFirstName}'s education? Feel free to create a class below and we'll let you know when an expert is ready to begin teaching it.
                 <br></br>
-                <form style={{marginTop: "4px", marginLeft: "auto", marginRight: "auto", display: "block"}}>
+                <form
+                  style={{
+                    marginTop: "4px",
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                    display: "block"
+                  }}
+                >
                   <label
                     for="createClassName"
                     style={{display: "inline"}}
@@ -397,7 +577,6 @@ class App extends React.Component {
           </div>
         </div>
       </div>);
-
   }
 }
 
