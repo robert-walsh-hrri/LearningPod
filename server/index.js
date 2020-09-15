@@ -1,5 +1,5 @@
 const path = require('path');
-const { connection, getUserInfo, deleteClass, getClasses, enrollClasses } = require('../database/index.js');
+const { connection, getUserInfo, deleteClass, getClasses, enrollClasses, createClass } = require('../database/index.js');
 const express = require('express');
 const bodyparser = require('body-parser');
 const app = express();
@@ -29,6 +29,17 @@ app.post('/user/', (req, res) => {
 app.post('/enroll/', (req, res) => {
   const { enrollClass, childFirstName, childLastName } = req.body;
   enrollClasses(enrollClass, childFirstName, childLastName, res);
+});
+
+app.post('/create_class/', (req, res) => {
+  const {
+    createClassName,
+    createClassStartDate,
+    createClassEndDate,
+    createClassDays,
+    createClassRate,
+  } = req.body;
+  createClass(createClassName, createClassStartDate, createClassEndDate, createClassDays, createClassRate, res);
 });
 
 app.listen(port, () => {

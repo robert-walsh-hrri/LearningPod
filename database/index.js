@@ -14,7 +14,7 @@ const getUserInfo = (userType, firstName, lastName, res) => {
   const sqlParentFirst = `SELECT student_id, first_name, last_name, pod FROM student WHERE student_id=(SELECT student_id FROM parent WHERE first_name=\'${firstName}\' AND last_name=\'${lastName}\')`;
   const sqlStudentFirst = `SELECT student_id, pod FROM student WHERE first_name=\'${firstName}\' AND last_name=\'${lastName}\'`
   const sqlStudentSecond = `SELECT * FROM classes INNER JOIN student_classes ON student_classes.class_id=classes.class_id where student_id=(SELECT student_id FROM student WHERE first_name=\'${firstName}\' AND last_name=\'${lastName}\')`;
-  // update queries to use studentFirst or parentFirst
+
   client.query(userType === 'student' ? sqlStudentFirst : sqlParentFirst, (err, results) => {
     if (err) {
       console.log(err);
@@ -53,7 +53,7 @@ const getClasses = (firstName, lastName, res) => {
     for (var i = 0; i < results.rows.length; i++) {
       resultArray.push(results.rows[i].class_id);
     }
-    let resultChecker = '(' + resultArray.join(',') + ')';
+    let resultChecker = '(' + resultArray.join(',') + ', 51)';
     const sqlGetClasses2 = `SELECT * FROM classes WHERE class_id NOT IN ${resultChecker}`;
     client.query(sqlGetClasses2, (err, results) => {
       res.send(results.rows);
@@ -83,8 +83,18 @@ const enrollClasses = (className, firstName, lastName, res) => {
   });
 };
 
+const createClass = (name, startDate, endDate, days, rate, res) => {
+  client.query(`INSERT INTO classes (class_name, start_date, end_date, days, rate, expert_id, expert_zoom) VALUES (\'${name}\', \'${startDate}\', \'${endDate}\', \'${days}\', \'${rate}\', 51, 'https://zoom.us/?pwd=WXQ3Qit1UXBaVy82elBlRHdHVStqQT09')`, (err, results) => {
+    if (err) {
+      console.log(err);
+    }
+    res.send(results);
+  })
+};
+
 module.exports.connection = client;
 module.exports.getUserInfo = getUserInfo;
 module.exports.deleteClass = deleteClass;
 module.exports.getClasses = getClasses;
 module.exports.enrollClasses = enrollClasses;
+module.exports.createClass = createClass;
