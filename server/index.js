@@ -1,5 +1,5 @@
 const path = require('path');
-const { connection, getUserInfo } = require('../database/index.js');
+const { connection, getUserInfo, deleteClass, getClasses, enrollClasses, createClass } = require('../database/index.js');
 const express = require('express');
 const bodyparser = require('body-parser');
 const app = express();
@@ -10,9 +10,36 @@ app.use(bodyparser());
 app.use('/', express.static(path.join(__dirname, '..', '/public/')));
 
 app.get('/user/userType:userType&firstName:firstName&lastName:lastName', (req, res) => {
-  console.log(req.params);
-  res.send(req.params);
-  // db controller ready to add
+  const { firstName, lastName } = req.params;
+  let { userType } = req.params;
+  userType = userType.slice(1);
+  getUserInfo(userType, firstName, lastName, res);
+});
+
+app.get('/classes/firstName:firstName&lastName:lastName', (req, res) => {
+  const { firstName, lastName } = req.params;
+  getClasses(firstName, lastName, res);
+});
+
+app.post('/user/', (req, res) => {
+  const { deleteThisClass, childFirstName, childLastName } = req.body;
+  deleteClass(deleteThisClass, childFirstName, childLastName, res);
+});
+
+app.post('/enroll/', (req, res) => {
+  const { enrollClass, childFirstName, childLastName } = req.body;
+  enrollClasses(enrollClass, childFirstName, childLastName, res);
+});
+
+app.post('/create_class/', (req, res) => {
+  const {
+    createClassName,
+    createClassStartDate,
+    createClassEndDate,
+    createClassDays,
+    createClassRate,
+  } = req.body;
+  createClass(createClassName, createClassStartDate, createClassEndDate, createClassDays, createClassRate, res);
 });
 
 app.listen(port, () => {
