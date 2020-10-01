@@ -21,6 +21,7 @@ class App extends React.Component {
       createClassDays: '',
       createClassRate: '',
     }
+
     this.handleRadioChange = this.handleRadioChange.bind(this);
     this.handleFirstNameChange = this.handleFirstNameChange.bind(this);
     this.handleLastNameChange = this.handleLastNameChange.bind(this);
