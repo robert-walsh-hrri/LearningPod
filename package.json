@@ -6,7 +6,7 @@
   "scripts": {
     "test": "test",
     "build": "webpack --config webpack.config.js",
-    "start": "nodemon server/index.js"
+    "start": "node server/index.js"
   },
   "repository": {
     "type": "git",
